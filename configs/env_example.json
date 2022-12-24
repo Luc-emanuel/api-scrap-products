@@ -1,0 +1,6 @@
+{
+  "string": "string_connection_mongodb_atlas",
+  "dbname": "db_name",
+  "user": "user",
+  "pass": "password"
+}
