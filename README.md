@@ -23,6 +23,11 @@ Relds é uma api de web scraping operando em lojas online e marketplaces, focada
   - `user: usuário do banco de dados`
   - `pass: senha do usuário do banco de dados`
 
+- **Inicialização**
+
+  - `pip install -r requirements.txt`
+  - `python main.py`
+
 - **Scrap**
 
   - **Request (POST)**
