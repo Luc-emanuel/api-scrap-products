@@ -3,7 +3,7 @@ from flask_cors import cross_origin
 from flask import request
 from bson import ObjectId
 
-from functions import abrirJson, jsonF, convertImageUrl, saveLog
+from functions import jsonF, convertImageUrl, saveLog
 from verifys import verify
 import scrap
 
@@ -32,12 +32,12 @@ def initRouters(app, db):
 					#
 				#
 			#
-			return { 'res': 'ok', 'data': '{} produtos atualizados!'.format(response) }
+			return { '_res': 'ok', 'data': '{} produtos atualizados!'.format(response) }
 		except:
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			tb = exc_tb.tb_lineno
 			erro = { 'exc_tipo': str(exc_type), 'exc_objeto': str(exc_obj), 'objeto': str(exc_tb), 'linha': int(tb) }
-			return { 'res': { 'erro': erro } }
+			return { '_res': 'error', 'data': { 'erro': erro } }
 		#
 	#
 	#
@@ -60,6 +60,37 @@ def initRouters(app, db):
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			tb = exc_tb.tb_lineno
 			erro = { 'exc_tipo': str(exc_type), 'exc_objeto': str(exc_obj), 'objeto': str(exc_tb), 'linha': int(tb) }
-			return { 'res': { 'erro': erro } }
+			return { '_res': 'error', 'data': { 'erro': erro } }
 		#
+	#
+	#
+	#
+	@app.route('/products/getproduct/<id>', methods=['GET'])
+	@cross_origin()
+	def getproduct(id):
+		try:
+			#
+			colecao = db['products']
+			#
+			res = colecao.find_one({ '_id': ObjectId(id) })
+			if res == None:
+				res = colecao.find_one({ '_id': id })
+				if res == None:
+					return { '_res': 'ok', 'data': 'product_not_found' }
+				#
+			#
+			if res != None:
+				res = jsonF(res)
+				res['tipo']=0
+				res["image"]=convertImageUrl(res["image"])
+				return { '_res': 'ok', 'data': res }
+			else:
+				return { '_res': 'ok', 'data': 'product_not_found' }
+		except:
+			exc_type, exc_obj, exc_tb = sys.exc_info()
+			tb = exc_tb.tb_lineno
+			erro = { 'exc_tipo': str(exc_type), 'exc_objeto': str(exc_obj), 'objeto': str(exc_tb), 'linha': int(tb) }
+			return { '_res': 'error', 'data': { 'erro': erro } }
+	#
+	#
 	#

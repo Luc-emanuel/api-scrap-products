@@ -10,13 +10,12 @@ def initRouters(app, client, db):
 	def testeServer():
 		try:
 			#
-			return { 'res': 'api tá on!!!' }
+			return { '_res': 'api tá on!!!' }
 		except:
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			tb = exc_tb.tb_lineno
 			erro = { 'exc_tipo': str(exc_type), 'exc_objeto': str(exc_obj), 'objeto': str(exc_tb), 'linha': int(tb) }
-			rest = { 'vlr': None }
-			return { 'response': { 'erro': erro, 'res': rest } }
+			return { '_res': 'error', 'data': { 'erro': erro } }
 		#
 	#
 	#
@@ -33,13 +32,12 @@ def initRouters(app, client, db):
 				if item2['name'] != 'admin' and item2['name'] != 'local' and item2['name'] != 'config':
 					res.append(item2)
 			#
-			return { 'res': res }
+			return { '_res': 'ok', 'data': res }
 		except:
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			tb = exc_tb.tb_lineno
 			erro = { 'exc_tipo': str(exc_type), 'exc_objeto': str(exc_obj), 'objeto': str(exc_tb), 'linha': int(tb) }
-			rest = { 'vlr': None }
-			return { 'response': { 'erro': erro, 'res': rest } }
+			return { '_res': 'error', 'data': { 'erro': erro } }
 		#
 	#
 	#
@@ -52,29 +50,28 @@ def initRouters(app, client, db):
 			body = request.json
 			name = body['name']
 			tipo = body['type']
-			res = ''
+			data = ''
 			if name != "":
 				if tipo == 'db':
 					client.drop_database(name)
-					res = 'ok'
+					data = 'ok'
 				elif tipo == 'col':
 					db.drop_collection(name)
-					res = 'ok'
+					data = 'ok'
 				else:
-					res = 'set_type'
+					data = 'set_type'
 			else:
 				if tipo != 'db' or tipo != 'col':
-					res = 'set_name_and_type'
+					data = 'set_name_and_type'
 				else:
-					res = 'set_name'
+					data = 'set_name'
 			#
-			return { 'res': res }
+			return { '_res': 'ok', 'data': data }
 		except:
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			tb = exc_tb.tb_lineno
 			erro = { 'exc_tipo': str(exc_type), 'exc_objeto': str(exc_obj), 'objeto': str(exc_tb), 'linha': int(tb) }
-			rest = { 'vlr': None }
-			return { 'response': { 'erro': erro, 'res': rest } }
+			return { '_res': 'error', 'data': { 'erro': erro } }
 		#
 	#
 #
